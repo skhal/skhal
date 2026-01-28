@@ -1,0 +1,73 @@
+# Copyright 2026 Samvel Khalatyan. All rights reserved.
+#
+# Use of this source code is governed by a BSD-style
+# license that can be found in the LICENSE file.
+default_install_hook_types: [pre-commit, commit-msg]
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      # keep-sorted start
+      - id: check-added-large-files
+      - id: check-executables-have-shebangs
+      - id: check-shebang-scripts-are-executable
+      - id: check-yaml
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+        exclude: "^.*\\.diff$"
+        # keep-sorted end
+  - repo: local
+    hooks:
+      # keep-sorted start
+      - id: check-issue
+        name: "Issue is set"
+        entry: check-issue
+        language: system
+        stages: [commit-msg]
+      - id: check-license
+        name: "Check license"
+        entry: ./check_license
+        language: system
+        stages: [pre-commit]
+        exclude_types: [json]
+      - id: check-nosubmit
+        name: "No-submit is not set"
+        entry: check-nosubmit
+        language: system
+      - id: check-todo
+        name: "Lint TODO format"
+        entry: check-todo
+        language: system
+      - id: html-format
+        name: "Format HTML"
+        entry: prettier
+        language: system
+        types_or: [html, json]
+        args: ["-w"]
+      - id: keep-sorted
+        name: "Keep lines sorted"
+        entry: keep-sorted
+        language: system
+      - id: markdown-format
+        name: "Format Markdown"
+        entry: markdownfmt
+        language: system
+        types_or: [markdown]
+        args: ["-w"]
+      - id: no-binary
+        name: "No binaries"
+        entry: "Binaries are not allowed"
+        language: fail
+        types_or: [binary]
+      - id: typos
+        name: "Check typos"
+        entry: typos
+        language: system
+        types: [text]
+        exclude: "^(.*\\.diff|infra/net.lab.*\\.conf)$"
+      - id: yaml-format
+        name: "Format YAML"
+        entry: yamlfmt
+        language: system
+        types_or: [yaml]
+    # keep-sorted end
